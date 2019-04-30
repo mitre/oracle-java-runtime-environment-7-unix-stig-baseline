@@ -13,7 +13,12 @@ control 'V-61037' do
 
   tag "fix": 'Upgrade Java Runtime Environment (JRE) 7 for Unix software to a supported version.'
 
-  describe package('java-1.7.0-openjdk') do
-    it { should_not be_installed }
+
+
+  java_cmd = command('java -version').stderr&.lines&.first&.strip&.split&.last
+  describe 'The java version installed' do
+    it "should be attribute('java_version" do
+      expect(java_cmd).to(match attribute('java_version'))
+    end
   end
 end

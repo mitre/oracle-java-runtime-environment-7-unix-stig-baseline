@@ -12,7 +12,11 @@ control 'V-39239' do
   tag "check": 'Open a terminal window and type the command; java -version sans quotes. The return value should contain Java build information; Java (TM) SE Runtime Environment (build x.x.x.x) Cross reference the build information on the system with the Oracle Java site to identify the most recent build available. http://www.oracle.com/technetwork/java/javase/downloads/index.html'
 
   tag "fix": 'Test applications to ensure operational compatibility with new version of Java. Install latest version of Java JRE.'
-  describe command('yum update java-1.7.0-openjdk') do
-    its('stdout') { should match(/No packages marked for update/) }
+  
+  java_cmd = command('java -version').stderr&.lines&.first&.strip&.split&.last
+  describe 'The java version installed' do
+    it "should be attribute('java_version" do
+      expect(java_cmd).to(match attribute('java_version'))
+    end
   end
 end
